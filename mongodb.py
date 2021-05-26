@@ -2,10 +2,14 @@ from pymongo import MongoClient
 
 
 class MongoDBConfig:
-    NAME = "ReadUser"
-    PASSWORD = "bkc_123"
-    HOST = "25.19.185.225"
+    # NAME = "ReadUser"
+    # PASSWORD = "bkc_123"
+    # HOST = "25.19.185.225"
     PORT = "27027"
+    NAME = "just_for_dev"
+    PASSWORD = "password_for_dev"
+    HOST = "localhost"
+    # PORT = "27027"
     DATABASE = "EXTRACT_DATA_KNOWLEDGE_GRAPH"
     TRANSACTIONS = "TRANSACTIONS"
     TRANSACTIONS_TRANSFER = "TRANSACTIONS_TRANSFER"
@@ -47,3 +51,12 @@ class Database(object):
         key = {"address": address}
 
         return self.mongo_wallet.find_one(key)
+
+    def update_event(self, collection, event):
+        key = {'_id': event.get('_id')}
+        data = {"$set": event}
+        return self.mongo_db[collection].update_one(key, data, upsert=True)
+
+    def get_event(self, collection, type_):
+        key = {'type': type_}
+        return self.mongo_db[collection].find(key)
